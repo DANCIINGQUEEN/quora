@@ -1,56 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import React, {useEffect} from 'react';
 import './App.css';
+import Quora from "./Quora";
+import {useDispatch, useSelector} from "react-redux";
+import {login, logout, selectUser} from "./features/userSlice";
+import Login from "./Login";
+import {auth} from "./firebase";
 
 function App() {
+    //현재 state에 user에 대한 정보를 얻고싶어서
+    const user=useSelector(selectUser)    //redux의 상태값을 조회하기위한 hook함수
+    //user의 login여부를 app전체에 알려줘야함
+    const dispatch=useDispatch()
+
+
+    //user 동기화 =>  로그인 했음을 앱 전역에 동기화
+    useEffect(()=>{
+        auth.onAuthStateChanged((authUser)=>{
+            if(authUser){
+                dispatch(login({
+                    uid:authUser.uid,
+                    photo:authUser.photoURL,
+                    displayName:authUser.displayName,
+                    email:authUser.email
+                }))
+                console.log(authUser)
+            }else{
+                dispatch(logout())
+            }
+        })
+    }, [dispatch])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+        {
+            user?(<Quora/>):(<Login/>)  //삼항조건문
+        }
     </div>
   );
 }

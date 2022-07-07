@@ -1,0 +1,32 @@
+.sidebarOptions {
+    display: flex;
+    flex-direction: column; /*세로 정렬*/
+}
+
+.sidebarOption {
+    display: flex; /*가로배치*/
+    align-items: center;
+    padding:10px;
+    cursor:pointer;
+}
+
+.sidebarOption:hover {
+    background-color: lightgray; /*마우스 올리면 연회색*/
+    border-radius: 5px;
+}
+.sidebarOption > img {
+    height:30px; /*이미지 높이 30px*/
+    margin-left: 10px; /*옆과 간격 10px*/
+    border-radius: 5px;
+}
+.sidebarOption > p {
+    color: black;
+    font-weight: 400; /*폰트 굵기*/
+    margin-left: 10px;
+}
+
+.sidebarOption > .MuiSvgIcon-root {
+    color:yellowgreen;
+    font-size:medium;
+    margin-left: 10px;
+}
